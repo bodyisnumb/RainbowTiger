@@ -454,6 +454,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 1342946602}
   colorCrystalPrefab: {fileID: 8750623450006694825, guid: 033eae9c6473f46b18913fca77a54886, type: 3}
+  progressCrystalPrefab: {fileID: 8750623450006694825, guid: 5a1b08dd1d9da4bdd91084a7b8b00b3e, type: 3}
+  tigerPrefab: {fileID: 6339845554272053287, guid: 4cdc6f6965af34925b8013b130e9c1ba, type: 3}
 --- !u!4 &1892919708
 Transform:
   m_ObjectHideFlags: 0
