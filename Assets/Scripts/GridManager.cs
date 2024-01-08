@@ -3,17 +3,16 @@ using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
 {
-    public GameObject rectanglePrefab; // Reference to your rectangle-shaped prefab
-    public int rows = 5; // Number of rows in the grid
-    public int columns = 5; // Number of columns in the grid
-    public float spacing = 2.0f; // Spacing between each cell
+    public GameObject rectanglePrefab;
+    public int rows = 5;
+    public int columns = 5;
+    public float spacing = 2.0f;
 
-    private Dictionary<Vector2Int, GameObject> gridCells; // Dictionary to store grid cells
-    private Vector2 cellCenterOffset; // Offset for placing objects at cell centers
+    private Dictionary<Vector2Int, GameObject> gridCells;
+    private Vector2 cellCenterOffset;
 
-    // Offset values for the grid position
-    private float gridOffsetX = -1.5f; // Adjust these values as needed
-    private float gridOffsetY = -3.5f; // Adjust these values as needed
+    private float gridOffsetX = -1.5f; 
+    private float gridOffsetY = -3.5f; 
 
     void Start()
     {
@@ -23,9 +22,9 @@ public class GridManager : MonoBehaviour
 
     void GenerateGrid()
     {
-        gridCells = new Dictionary<Vector2Int, GameObject>(); // Initialize the dictionary
+        gridCells = new Dictionary<Vector2Int, GameObject>();
 
-        Vector3 spawnPosition = transform.position; // Starting position at the GameObject's position
+        Vector3 spawnPosition = transform.position;
         Vector3 originalSize = rectanglePrefab.GetComponent<Renderer>().bounds.size;
 
         for (int row = 0; row < rows; row++)
@@ -35,17 +34,17 @@ public class GridManager : MonoBehaviour
                 spawnPosition = transform.position +
                     new Vector3(col * (originalSize.x + spacing), row * (originalSize.y + spacing), 0);
                 GameObject newRectangle = Instantiate(rectanglePrefab, spawnPosition, Quaternion.identity);
-                newRectangle.transform.parent = transform; // Organize under GridManager
+                newRectangle.transform.parent = transform;
 
                 Vector2Int gridPos = new Vector2Int(col, row);
-                gridCells.Add(gridPos, newRectangle); // Add the cell to the dictionary
+                gridCells.Add(gridPos, newRectangle);
             }
         }
     }
 
     public Dictionary<Vector2Int, GameObject> GetGrid()
     {
-        return gridCells; // Return the dictionary containing grid cells
+        return gridCells;
     }
 
     public Vector2 GetWorldPosition(int x, int y)
@@ -63,7 +62,6 @@ public class GridManager : MonoBehaviour
 
     void CalculateCellCenterOffset()
     {
-        // Calculate the center offset based on the size of the cell and spacing
         Vector2 cellSize = new Vector2(rectanglePrefab.transform.localScale.x + spacing, rectanglePrefab.transform.localScale.y + spacing);
         cellCenterOffset = cellSize / 2.0f;
     }
@@ -71,6 +69,32 @@ public class GridManager : MonoBehaviour
     public Vector2 GetCellCenterOffset()
     {
         return cellCenterOffset;
+    }
+
+    public Color GetCellColor(Vector2Int cellPosition)
+    {
+        if (gridCells.TryGetValue(cellPosition, out GameObject cellObject))
+        {
+            SpriteRenderer cellRenderer = cellObject.GetComponent<SpriteRenderer>();
+            if (cellRenderer != null)
+            {
+                return cellRenderer.color;
+            }
+        }
+        
+        return Color.white;
+    }
+
+    public void UpdateCellColor(Vector2Int position, Color color)
+    {
+        if (gridCells.TryGetValue(position, out GameObject cellObject))
+        {
+            SpriteRenderer cellRenderer = cellObject.GetComponent<SpriteRenderer>();
+            if (cellRenderer != null)
+            {
+                cellRenderer.color = color;
+            }
+        }
     }
 }
 

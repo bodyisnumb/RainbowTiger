@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class LevelGenerator : MonoBehaviour
 {
     public GridManager gridManager;
+    private CrystalManager crystalManager;
     public GameObject colorCrystalPrefab;
     public GameObject progressCrystalPrefab;
     public GameObject tigerPrefab;
@@ -17,7 +18,6 @@ public class LevelGenerator : MonoBehaviour
 
     private int currentLevel = 1;
     private int colorsAvailableAtStart = 3;
-//    private int colorsToAddEveryFiveLevels = 1;
 
     private List<Color> rainbowColors = new List<Color> {
         Color.red,
@@ -31,9 +31,10 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
+        crystalManager = FindObjectOfType<CrystalManager>();
+
         SpawnTigerOnFirstCell();
-        GenerateLevel();
-        
+        GenerateLevel(); 
     }
 
     void GenerateLevel()
@@ -42,6 +43,14 @@ public class LevelGenerator : MonoBehaviour
         GenerateColorBrickStructure();
         
         GenerateProgressCrystals();
+
+        foreach (var brick in bricks)
+        {
+            Vector2Int position = brick.Key;
+            Color randomColor = brickColors[position];
+            
+            gridManager.UpdateCellColor(position, randomColor);
+        }
     }
 
     void InitializeLevel()
@@ -168,12 +177,23 @@ public class LevelGenerator : MonoBehaviour
     void PlaceCrystalOnBrick(GameObject brick, Color color)
     {
         Vector2Int brickPosition = new Vector2Int((int)brick.transform.position.x, (int)brick.transform.position.y);
+
+        if (colorCrystals.ContainsKey(brickPosition))
+        {
+            GameObject existingCrystal = colorCrystals[brickPosition];
+            colorCrystals.Remove(brickPosition);
+            crystalManager.RemoveColorCrystal(existingCrystal);
+            Destroy(existingCrystal);
+        }
+
         Vector3 crystalPosition = brick.transform.position;
-        crystalPosition.z = -1; // Set the Z position
+        crystalPosition.z = -5;
 
         GameObject crystal = Instantiate(colorCrystalPrefab, crystalPosition, Quaternion.identity);
         crystal.GetComponent<SpriteRenderer>().color = color;
         colorCrystals[brickPosition] = crystal;
+
+        crystalManager.AddColorCrystal(crystal);
     }
 
     void RegenerateCrystals()
@@ -216,7 +236,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        return Color.clear; // Return a clear color if no different color is found
+        return Color.clear;
     }
 
 void GenerateProgressCrystals()
@@ -225,7 +245,6 @@ void GenerateProgressCrystals()
     Vector2Int startingPosition = new Vector2Int(0, 0);
     availablePositions.Remove(startingPosition);
 
-    // Get positions adjacent to color crystals
     HashSet<Vector2Int> positionsToRemove = new HashSet<Vector2Int>();
     foreach (var crystal in colorCrystals)
     {
@@ -233,13 +252,11 @@ void GenerateProgressCrystals()
         RemoveNearbyPositions(crystalPosition, availablePositions, positionsToRemove);
     }
 
-    // Remove positions already occupied by progress crystals
     foreach (var crystal in progressCrystals)
     {
         availablePositions.Remove(crystal.Key);
     }
 
-    // Remove positions adjacent to color crystals
     foreach (var pos in positionsToRemove)
     {
         availablePositions.Remove(pos);
@@ -251,18 +268,16 @@ void GenerateProgressCrystals()
     {
         Vector2Int randomPosition = availablePositions[Random.Range(0, availablePositions.Count)];
 
-        // Check if the random position is not occupied by a progress crystal
         if (!progressCrystals.ContainsKey(randomPosition))
         {
             PlaceProgressCrystalOnBrick(bricks[randomPosition]);
             progressCrystals[randomPosition] = progressCrystalPrefab;
 
-            // Remove nearby positions to prevent spawning on adjacent tiles
             RemoveNearbyPositions(randomPosition, availablePositions);
         }
         else
         {
-            i--; // Retry placing progress crystal at another position
+            i--;
         }
 
         availablePositions.Remove(randomPosition);
@@ -276,7 +291,6 @@ void RemoveNearbyPositions(Vector2Int position, List<Vector2Int> availablePositi
         positionsToRemove = new HashSet<Vector2Int>();
     }
 
-    // Define positions that are adjacent to the given position
     Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
     foreach (Vector2Int dir in directions)
@@ -288,7 +302,6 @@ void RemoveNearbyPositions(Vector2Int position, List<Vector2Int> availablePositi
         }
     }
 
-    // Now remove the nearby positions from available positions
     foreach (var pos in positionsToRemove)
     {
         availablePositions.Remove(pos);
@@ -299,27 +312,28 @@ void RemoveNearbyPositions(Vector2Int position, List<Vector2Int> availablePositi
     {
         Vector2Int brickPosition = new Vector2Int((int)brick.transform.position.x, (int)brick.transform.position.y);
         Vector3 crystalPosition = brick.transform.position;
-        crystalPosition.z = -1;
+        crystalPosition.z = -5;
 
         GameObject crystal = Instantiate(progressCrystalPrefab, crystalPosition, Quaternion.identity);
         progressCrystals[brickPosition] = crystal;
 
-        // Check if there's a color crystal on the same brick position
+        crystalManager.AddProgressCrystal(crystal);
+
         if (colorCrystals.ContainsKey(brickPosition))
         {
-            Destroy(colorCrystals[brickPosition]); // Remove the color crystal
-            colorCrystals.Remove(brickPosition); // Remove it from the dictionary
+        GameObject existingCrystal = colorCrystals[brickPosition];
+        colorCrystals.Remove(brickPosition);
+        crystalManager.RemoveColorCrystal(existingCrystal);
+        Destroy(existingCrystal);
         }
     }
 
     void SpawnTigerOnFirstCell()
     {
-        // Get the position of the first cell in the grid
         Vector2Int firstCellPosition = new Vector2Int(0, 0);
         Vector2 cellCenter = gridManager.GetWorldPosition(firstCellPosition.x, firstCellPosition.y) +
-                            gridManager.GetCellCenterOffset(); // Assuming you have a method to get the center offset
+                            gridManager.GetCellCenterOffset();
 
-        // Instantiate the Tiger at the center of the first cell
         GameObject tiger = Instantiate(tigerPrefab, cellCenter, Quaternion.identity);
     }
 
