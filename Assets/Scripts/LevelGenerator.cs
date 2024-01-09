@@ -21,7 +21,7 @@ public class LevelGenerator : MonoBehaviour
 
     private List<Color> rainbowColors = new List<Color> {
         Color.red,
-        new Color(1.0f, 0.5f, 0.0f), // Orange
+        new Color(1.0f, 0.6f, 0.0f), // Orange
         Color.yellow,
         Color.green,
         Color.cyan,
