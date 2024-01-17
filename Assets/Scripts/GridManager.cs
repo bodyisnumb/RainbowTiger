@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class GridManager : MonoBehaviour
 {
     public GameObject rectanglePrefab;
-    public int rows = 5;
-    public int columns = 5;
+    public int rows = 8;
+    public int columns = 4;
     public float spacing = 2.0f;
 
     private Dictionary<Vector2Int, GameObject> gridCells;
@@ -95,6 +95,13 @@ public class GridManager : MonoBehaviour
                 cellRenderer.color = color;
             }
         }
+    }
+
+    public void UpdateGridSize(int newColumns, int newRows)
+    {
+        columns = newColumns;
+        rows = newRows;
+        GenerateGrid();
     }
 }
 

@@ -20,6 +20,10 @@ public class CrystalManager : MonoBehaviour
         {
             Debug.Log("YOU WON!");
             wonDisplayed = true;
+
+            int currentLevel = LevelManager.GetCurrentLevel();
+            LevelManager.SetCurrentLevel(currentLevel + 1);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
     }
 

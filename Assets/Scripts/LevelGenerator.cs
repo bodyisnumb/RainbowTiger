@@ -19,6 +19,9 @@ public class LevelGenerator : MonoBehaviour
     private int currentLevel = 1;
     private int colorsAvailableAtStart = 3;
 
+    private int rows = 8; // Define rows
+    private int columns = 4; // Define columns
+
     private List<Color> rainbowColors = new List<Color> {
         Color.red,
         new Color(1.0f, 0.6f, 0.0f), // Orange
@@ -32,6 +35,10 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         crystalManager = FindObjectOfType<CrystalManager>();
+        currentLevel = LevelManager.GetCurrentLevel();
+
+        int extraColumns = (currentLevel - 1) / 10 * 4;
+        gridManager.UpdateGridSize(columns + extraColumns, rows);
 
         SpawnTigerOnFirstCell();
         GenerateLevel(); 
@@ -40,15 +47,17 @@ public class LevelGenerator : MonoBehaviour
     void GenerateLevel()
     {
         InitializeLevel();
+
+
+
+
         GenerateColorBrickStructure();
-        
         GenerateProgressCrystals();
 
         foreach (var brick in bricks)
         {
             Vector2Int position = brick.Key;
             Color randomColor = brickColors[position];
-            
             gridManager.UpdateCellColor(position, randomColor);
         }
     }

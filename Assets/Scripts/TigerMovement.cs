@@ -2,14 +2,23 @@ using UnityEngine;
 
 public class TigerMovement : MonoBehaviour
 {
-    public float moveSpeed = 2f;
+    private float unsafeTime = 0f;
+//    private const float maxUnsafeTime = 0.01f;
+    private const float maxUnsafeTime = 10f; //undead
+    private float moveSpeed = 2f;
     private LevelGenerator levelGenerator;
     private CrystalManager crystalManager;
     private GridManager gridManager;
+    private UIManagerGame uIManagerGame;
     private Color currentCellColor;
     private Vector2 direction;
     private bool isMoving;
     private Vector3 targetPosition;
+
+    private CircleCollider2D tigerCollider;
+    private float originalColliderRadius;
+
+    public bool isShieldActive = false;
 
     private int gridWidth;
     private int gridHeight;
@@ -17,11 +26,21 @@ public class TigerMovement : MonoBehaviour
 
     public GameObject spikes;
 
+    public GameObject explosionPrefab;
+
     void Start()
     {
         levelGenerator = FindObjectOfType<LevelGenerator>();
         crystalManager = FindObjectOfType<CrystalManager>();
         gridManager = FindObjectOfType<GridManager>();
+        uIManagerGame = FindObjectOfType<UIManagerGame>();
+
+        tigerCollider = GetComponent<CircleCollider2D>();
+
+        if (tigerCollider != null)
+        {
+            originalColliderRadius = tigerCollider.radius;
+        }
 
         gridWidth = levelGenerator.gridManager.columns;
         gridHeight = levelGenerator.gridManager.rows;
@@ -54,10 +73,11 @@ public class TigerMovement : MonoBehaviour
         {
             CheckInput();
             MoveTiger();
+            CheckUnsafeColor();
         }
 
         UpdateCurrentCellColor();
-        Debug.Log(currentCellColor);
+        Debug.Log(unsafeTime);
     }
 
     void UpdateCurrentCellColor()
@@ -114,16 +134,41 @@ public class TigerMovement : MonoBehaviour
         {
             Color crystalColor = collision.GetComponent<SpriteRenderer>().color;
             Debug.Log("Color crystal gathered: " + crystalColor);
+                    // Instantiate the explosion prefab
+            GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
+
+            // Get the particle system component on the explosion prefab
+            ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
+            
+            // Play the particle system
+            if (explosionParticles != null)
+            {
+                explosionParticles.Play();
+            }
             crystalManager.RemoveColorCrystal(collision.gameObject);
             // Implement logic based on the color gathered
+            Destroy(explosionInstance, explosionParticles.main.duration);
+            uIManagerGame.AddToScoreAndCoins(1);
         }
 
         if (collision.CompareTag("ProgressCrystal"))
         {
             Color crystalColor = collision.GetComponent<SpriteRenderer>().color;
             Debug.Log("Progress crystal gathered: " + crystalColor);
+            GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
+
+            // Get the particle system component on the explosion prefab
+            ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
+            
+            // Play the particle system
+            if (explosionParticles != null)
+            {
+                explosionParticles.Play();
+            }
             crystalManager.RemoveProgressCrystal(collision.gameObject);
             // Implement logic based on the progress gathered
+            Destroy(explosionInstance, explosionParticles.main.duration);
+            uIManagerGame.AddToScoreAndCoins(1);
         }
 
     }
@@ -168,6 +213,50 @@ public class TigerMovement : MonoBehaviour
         {
             direction = new Vector2(horizontal, vertical).normalized;
         }
+    }
+
+    void CheckUnsafeColor()
+    {
+        if(!isShieldActive)
+        {
+            if (!crystalManager.IsColorSafe(currentCellColor))
+            {
+                unsafeTime += Time.deltaTime;
+
+                if (unsafeTime >= maxUnsafeTime)
+                {
+                    GameOver();
+                    Debug.Log("Game Over");
+                }
+            }
+            else
+            {
+                unsafeTime = 0f;
+            }
+        }
+    }
+
+    public void EnlargeCollider(float newRadius)
+    {
+        if (tigerCollider != null)
+        {
+            tigerCollider.radius = newRadius;
+        }
+    }
+
+    // Add this method to shrink the collider back to its original size
+    public void ShrinkCollider()
+    {
+        if (tigerCollider != null)
+        {
+            // Set the collider back to its original size, you may need to adjust this based on your initial collider radius
+            tigerCollider.radius = originalColliderRadius;
+        }
+    }
+
+    void GameOver()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
     }
 
     void FixedUpdate()
