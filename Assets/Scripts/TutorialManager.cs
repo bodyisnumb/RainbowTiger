@@ -1,64 +1,44 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    public Button tutorialButton;
-    public GameObject backgroundImage;
-    public GameObject mainButtonsPanel;
-    public Text[] tutorialTexts;
-    private int currentIndex = -1;
-    private bool tutorialStarted = false;
+    public string[] tutorialTexts;  // Array of tutorial texts corresponding to each step
+    private Text tutorialTextComponent;
+
+    private int currentIndex = 0;
 
     void Start()
     {
-        backgroundImage.SetActive(false);
-
-        foreach (Text text in tutorialTexts)
+        if (tutorialTexts.Length == 0)
         {
-            text.gameObject.SetActive(false);
+            Debug.LogError("TutorialManager: Ensure tutorialImage is set and tutorialTexts array is not empty.");
+            return;
         }
 
-        tutorialButton.onClick.AddListener(StartTutorial);
-    }
-
-    void StartTutorial()
-    {
-        tutorialButton.gameObject.SetActive(false);
-        tutorialStarted = true;
-        ShowNextTutorial();
+        tutorialTextComponent.text = tutorialTexts[currentIndex];
     }
 
     void Update()
     {
-        if (tutorialStarted && currentIndex >= 0 && Input.GetMouseButtonDown(0))
+        // Check for touch/click input to proceed through the tutorial
+        if (Input.GetMouseButtonDown(0))
         {
-            ShowNextTutorial();
-        }
-    }
-
-    void ShowNextTutorial()
-    {
-        currentIndex++;
-
-        if (currentIndex < tutorialTexts.Length)
-        {
-            backgroundImage.SetActive(true);
-
-            foreach (Text text in tutorialTexts)
+            // Check if there are more tutorial steps
+            if (currentIndex < tutorialTexts.Length - 1)
             {
-                text.gameObject.SetActive(false);
+                // Move to the next tutorial step
+                currentIndex++;
+                tutorialTextComponent.text = tutorialTexts[currentIndex];
             }
-
-            tutorialTexts[currentIndex].gameObject.SetActive(true);
-        }
-        else
-        {
-            backgroundImage.SetActive(false);
-            tutorialTexts[2].gameObject.SetActive(false);
-            mainButtonsPanel.SetActive(true);
-            Debug.Log("Tutorial Ended. Perform necessary actions...");
-            tutorialButton.gameObject.SetActive(true);
+            else
+            {
+                // Load the main menu scene when the tutorial is complete
+                SceneManager.LoadScene("MainMenu");
+            }
         }
     }
 }
+
+
