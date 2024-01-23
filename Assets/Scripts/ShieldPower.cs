@@ -6,16 +6,26 @@ public class ShieldPower : MonoBehaviour
     private bool isShieldActive = false;
     private float shieldTimer = 0f;
     private TigerMovement tigerMovement;
+    private EconomicManager economicManager;
+    private SoundPlayer soundPlayer;
+    private int shieldCount = 0;
 
+    void Start()
+    {
+        economicManager = FindObjectOfType<EconomicManager>();
+        soundPlayer = FindObjectOfType<SoundPlayer>();
+
+    }
 
     // Call this method when the Shield Power button is pressed
     public void ActivateShieldPower()
     {
-        if (!isShieldActive)
+        if (!isShieldActive && shieldCount > 0)
         {
             isShieldActive = true;
             shieldTimer = 0f;
-        //sound
+            economicManager.DeductShield();
+            soundPlayer.ShieldSound();
         }
     }
 
@@ -23,6 +33,7 @@ public class ShieldPower : MonoBehaviour
     {
         tigerMovement = FindObjectOfType<TigerMovement>();
 
+        shieldCount = economicManager.GetShieldCount();
 
         if (isShieldActive)
         {

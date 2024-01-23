@@ -52,13 +52,13 @@ public class SoundPlayer : MonoBehaviour
 
     public void BombSound()
     {
-        audioSource.clip = shield_guard;
+        audioSource.clip = electricity;
         audioSource.Play();
     }
 
     public void ShieldSound()
     {
-        audioSource.clip = electricity;
+        audioSource.clip = shield_guard;
         audioSource.Play();
     }
 

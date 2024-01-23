@@ -3,8 +3,8 @@ using UnityEngine;
 public class TigerMovement : MonoBehaviour
 {
     private float unsafeTime = 0f;
-//    private const float maxUnsafeTime = 0.01f;
-    private const float maxUnsafeTime = 10f; //undead
+    private const float maxUnsafeTime = 0.01f;
+//    private const float maxUnsafeTime = 10f; //undead
     private float moveSpeed = 2f;
     private LevelGenerator levelGenerator;
     private CrystalManager crystalManager;
@@ -27,6 +27,7 @@ public class TigerMovement : MonoBehaviour
     public GameObject spikes;
 
     public GameObject explosionPrefab;
+    private SoundPlayer soundPlayer;
 
     void Start()
     {
@@ -34,6 +35,7 @@ public class TigerMovement : MonoBehaviour
         crystalManager = FindObjectOfType<CrystalManager>();
         gridManager = FindObjectOfType<GridManager>();
         uIManagerGame = FindObjectOfType<UIManagerGame>();
+        soundPlayer = FindObjectOfType<SoundPlayer>();
 
         tigerCollider = GetComponent<CircleCollider2D>();
 
@@ -122,6 +124,11 @@ public class TigerMovement : MonoBehaviour
 
         bool isSafe = crystalManager.IsColorSafe(currentCellColor);
 
+        if(!isSafe)
+        {
+         //   soundPlayer.BombSound();
+        }
+
         if (spikes != null)
         {
             spikes.SetActive(!isSafe);
@@ -136,7 +143,7 @@ public class TigerMovement : MonoBehaviour
             Debug.Log("Color crystal gathered: " + crystalColor);
                     // Instantiate the explosion prefab
             GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
-
+            soundPlayer.SuccessSound();
             // Get the particle system component on the explosion prefab
             ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
             
@@ -144,6 +151,7 @@ public class TigerMovement : MonoBehaviour
             if (explosionParticles != null)
             {
                 explosionParticles.Play();
+
             }
             crystalManager.RemoveColorCrystal(collision.gameObject);
             // Implement logic based on the color gathered
@@ -164,9 +172,10 @@ public class TigerMovement : MonoBehaviour
             if (explosionParticles != null)
             {
                 explosionParticles.Play();
+
             }
             crystalManager.RemoveProgressCrystal(collision.gameObject);
-            // Implement logic based on the progress gathered
+            soundPlayer.SuccessSound();
             Destroy(explosionInstance, explosionParticles.main.duration);
             uIManagerGame.AddToScoreAndCoins(1);
         }
@@ -217,9 +226,7 @@ public class TigerMovement : MonoBehaviour
 
     void CheckUnsafeColor()
     {
-        if(!isShieldActive)
-        {
-            if (!crystalManager.IsColorSafe(currentCellColor))
+        if (!crystalManager.IsColorSafe(currentCellColor) && !isShieldActive)
             {
                 unsafeTime += Time.deltaTime;
 
@@ -229,11 +236,10 @@ public class TigerMovement : MonoBehaviour
                     Debug.Log("Game Over");
                 }
             }
-            else
+        else
             {
                 unsafeTime = 0f;
             }
-        }
     }
 
     public void EnlargeCollider(float newRadius)

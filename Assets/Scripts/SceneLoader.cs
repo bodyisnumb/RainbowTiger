@@ -18,6 +18,16 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadSceneAsync("MainMenu"));
     }
 
+    public void LoadMenuFast()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void LoadTutorialFast()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
+
     IEnumerator LoadSceneAsync(string sceneName)
     {
         loadingScreen.SetActive(true);

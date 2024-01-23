@@ -5,19 +5,23 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     public string[] tutorialTexts;  // Array of tutorial texts corresponding to each step
-    private Text tutorialTextComponent;
+    public Text tutorialTextComponent;
 
     private int currentIndex = 0;
 
     void Start()
     {
-        if (tutorialTexts.Length == 0)
-        {
-            Debug.LogError("TutorialManager: Ensure tutorialImage is set and tutorialTexts array is not empty.");
-            return;
-        }
+        // Print the length of the tutorialTexts array for debugging
+        Debug.Log("Array Length: " + tutorialTexts.Length);
 
-        tutorialTextComponent.text = tutorialTexts[currentIndex];
+        if (tutorialTexts.Length > 0)
+        {
+            tutorialTextComponent.text = tutorialTexts[currentIndex];
+        }
+        else
+        {
+            Debug.LogError("TutorialManager: Ensure tutorialTexts array is not empty.");
+        }
     }
 
     void Update()
@@ -40,5 +44,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 }
+
 
 

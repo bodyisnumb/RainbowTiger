@@ -15,6 +15,11 @@ public class UIManagerGame : MonoBehaviour
 
         UpdateUI();
     }
+    
+    void Update()
+    {
+        UpdateUI();
+    }
 
     public void UpdateUI()
     {
