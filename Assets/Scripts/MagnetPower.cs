@@ -26,7 +26,7 @@ public class MagnetPower : MonoBehaviour
             isMagnetActive = true;
             magnetTimer = 0f;
 
-            soundPlayer.BatterySound();
+            soundPlayer.PlaySound("Battery");
             tigerMovement.EnlargeCollider(enlargedColliderRadius);
             economicManager.DeductBattery();
             // Implement any visual or sound effects for the magnet activation

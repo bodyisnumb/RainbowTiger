@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class SoundPlayer : MonoBehaviour
 {
-
-
-
     public AudioSource audioSource;
     public AudioClip button;
     public AudioClip battery_recharging;
@@ -15,57 +12,49 @@ public class SoundPlayer : MonoBehaviour
     public AudioClip shield_guard;
     public AudioClip success;
 
-    public static SoundPlayer SoundControllerInstance;
+    private Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
+    private bool isPlaying = false;
 
     void Awake()
     {
         DontDestroyOnLoad(this);
 
-        if (SoundControllerInstance == null)
+        if (audioSource == null)
         {
-            SoundControllerInstance = this;
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
-        else
+
+        soundDictionary.Add("Button", button);
+        soundDictionary.Add("Battery", battery_recharging);
+        soundDictionary.Add("Bush", bush);
+        soundDictionary.Add("Electricity", electricity);
+        soundDictionary.Add("Shield", shield_guard);
+        soundDictionary.Add("Success", success);
+    }
+
+    public void PlaySound(string soundName)
+    {
+        if (!isPlaying)
         {
-            Destroy(gameObject);
+            if (soundDictionary.ContainsKey(soundName))
+            {
+                audioSource.clip = soundDictionary[soundName];
+                audioSource.Play();
+                StartCoroutine(WaitForSound());
+            }
+            else
+            {
+                Debug.LogWarning("Sound not found: " + soundName);
+            }
         }
     }
 
-
-    public void ButtonSound()
+    IEnumerator WaitForSound()
     {
-        audioSource.clip = button;
-        audioSource.Play();
+        isPlaying = true;
+        yield return new WaitForSeconds(audioSource.clip.length);
+        isPlaying = false;
     }
-
-    public void BatterySound()
-    {
-        audioSource.clip = battery_recharging;
-        audioSource.Play();
-    }
-
-    public void BushSound()
-    {
-        audioSource.clip = bush;
-        audioSource.Play();
-    }
-
-    public void BombSound()
-    {
-        audioSource.clip = electricity;
-        audioSource.Play();
-    }
-
-    public void ShieldSound()
-    {
-        audioSource.clip = shield_guard;
-        audioSource.Play();
-    }
-
-    public void SuccessSound()
-    {
-        audioSource.clip = success;
-        audioSource.Play();
-    }
-
 }
+
+

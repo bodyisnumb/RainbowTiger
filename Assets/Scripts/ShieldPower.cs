@@ -25,7 +25,7 @@ public class ShieldPower : MonoBehaviour
             isShieldActive = true;
             shieldTimer = 0f;
             economicManager.DeductShield();
-            soundPlayer.ShieldSound();
+            soundPlayer.PlaySound("Shield");
         }
     }
 

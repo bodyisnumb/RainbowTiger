@@ -281,7 +281,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 314.7482, y: 809.3525}
-  m_SizeDelta: {x: 100, y: 75}
+  m_SizeDelta: {x: 125, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &130191812
 MonoBehaviour:
@@ -1735,7 +1735,7 @@ MonoBehaviour:
   button: {fileID: 8300000, guid: 55546a36314334781b5e234df55139fe, type: 3}
   battery_recharging: {fileID: 8300000, guid: 865f8ad97f3074022b4db1c96b10a684, type: 3}
   bush: {fileID: 8300000, guid: efeb44aa145144511b9e0b4dbe305d77, type: 3}
-  electricity: {fileID: 8300000, guid: 3b4ee11749aba4470acda5bff7e1f6d9, type: 3}
+  electricity: {fileID: 8300000, guid: 23926dd2d235e45408c21d7e8570b47c, type: 3}
   shield_guard: {fileID: 8300000, guid: 0aa8d2855996c4d748ae93f2f2835a65, type: 3}
   success: {fileID: 8300000, guid: d6ad7c928b5104dbda5d877c55470327, type: 3}
 --- !u!4 &1678112580
@@ -1794,7 +1794,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 91, y: -796}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 125, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1722771933
 MonoBehaviour:
@@ -2139,7 +2139,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -88.85612, y: -796}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 125, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1919612392
 MonoBehaviour:
@@ -2299,7 +2299,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -314.7482, y: 809.3525}
-  m_SizeDelta: {x: 100, y: 75}
+  m_SizeDelta: {x: 125, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1945344844
 MonoBehaviour:

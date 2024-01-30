@@ -29,6 +29,9 @@ public class TigerMovement : MonoBehaviour
     public GameObject explosionPrefab;
     private SoundPlayer soundPlayer;
 
+    private Vector3 originalScale;
+    private bool isJumping;
+
     void Start()
     {
         levelGenerator = FindObjectOfType<LevelGenerator>();
@@ -62,6 +65,9 @@ public class TigerMovement : MonoBehaviour
 
         spikes = transform.Find("Spikes").gameObject;
         ToggleSpikesBasedOnColor();
+
+        originalScale = transform.localScale;
+        isJumping = false;
     }
 
     void Update()
@@ -76,6 +82,7 @@ public class TigerMovement : MonoBehaviour
             CheckInput();
             MoveTiger();
             CheckUnsafeColor();
+            UpdateJumpingAnimation();
         }
 
         UpdateCurrentCellColor();
@@ -88,6 +95,19 @@ public class TigerMovement : MonoBehaviour
         currentCellColor = gridManager.GetCellColor(currentCellPosition);
         
         ToggleSpikesBasedOnColor();
+    }
+
+    void UpdateJumpingAnimation()
+    {
+        if (isJumping)
+        {
+            float scaleY = Mathf.PingPong(Time.time * 7.0f, 0.15f); // Adjust the multiplier for the jump height
+            transform.localScale = new Vector3(originalScale.x, scaleY + originalScale.y, originalScale.z);
+        }
+        else
+        {
+            transform.localScale = originalScale;
+        }
     }
 
     void MoveTiger()
@@ -106,6 +126,7 @@ public class TigerMovement : MonoBehaviour
 
                 targetPosition = new Vector3(targetCellCenter.x - 1, targetCellCenter.y - 1, -5f);
                 isMoving = true;
+                isJumping = true;
             }
             else
             {
@@ -126,7 +147,7 @@ public class TigerMovement : MonoBehaviour
 
         if(!isSafe)
         {
-         //   soundPlayer.BombSound();
+           soundPlayer.PlaySound("Electricity");
         }
 
         if (spikes != null)
@@ -143,7 +164,7 @@ public class TigerMovement : MonoBehaviour
             Debug.Log("Color crystal gathered: " + crystalColor);
                     // Instantiate the explosion prefab
             GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
-            soundPlayer.SuccessSound();
+            soundPlayer.PlaySound("Success");
             // Get the particle system component on the explosion prefab
             ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
             
@@ -175,7 +196,7 @@ public class TigerMovement : MonoBehaviour
 
             }
             crystalManager.RemoveProgressCrystal(collision.gameObject);
-            soundPlayer.SuccessSound();
+            soundPlayer.PlaySound("Success");
             Destroy(explosionInstance, explosionParticles.main.duration);
             uIManagerGame.AddToScoreAndCoins(1);
         }
@@ -275,6 +296,7 @@ public class TigerMovement : MonoBehaviour
             {
                 transform.position = targetPosition;
                 isMoving = false;
+                isJumping = false;
             }
         }
     }
