@@ -11,6 +11,8 @@ public class UIManagerMenu : MonoBehaviour
     public Button buyMagnetsButton;
     public Button buyShieldButton;
 
+    public GameObject noMoneyPanel; // Reference to the NoMoneyPanel
+
     private EconomicManager economicManager;
 
     private void Start()
@@ -41,6 +43,8 @@ public class UIManagerMenu : MonoBehaviour
         else
         {
             Debug.Log("Not enough coins to buy magnets!");
+            // Show the NoMoneyPanel
+            noMoneyPanel.SetActive(true);
         }
     }
 
@@ -54,6 +58,8 @@ public class UIManagerMenu : MonoBehaviour
         else
         {
             Debug.Log("Not enough coins to buy bomb!");
+            // Show the NoMoneyPanel
+            noMoneyPanel.SetActive(true);
         }
     }
 
@@ -67,6 +73,9 @@ public class UIManagerMenu : MonoBehaviour
         else
         {
             Debug.Log("Not enough coins to buy shield!");
+            // Show the NoMoneyPanel
+            noMoneyPanel.SetActive(true);
         }
     }
 }
+
