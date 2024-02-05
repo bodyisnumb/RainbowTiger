@@ -32,7 +32,7 @@ public class SceneLoader : MonoBehaviour
     {
         loadingScreen.SetActive(true);
 
-        // Add a minimum loading time for the initial 50%
+        
         float initialDelay = 1.0f;
         float elapsedTime = 0f;
 
@@ -40,7 +40,7 @@ public class SceneLoader : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            // Update the loading bar value during the initial delay
+            
             if (loadingBar != null)
             {
                 loadingBar.value = Mathf.Lerp(0f, 0.5f, elapsedTime / initialDelay);
@@ -53,9 +53,9 @@ public class SceneLoader : MonoBehaviour
 
         while (!operation.isDone)
         {
-            float progress = Mathf.Clamp01(operation.progress / 0.9f); // 0.9 is the completion point
+            float progress = Mathf.Clamp01(operation.progress / 0.9f); 
 
-            // Update the loading bar value after the initial delay
+            
             if (loadingBar != null)
             {
                 loadingBar.value = Mathf.Lerp(0.5f, 1f, progress);

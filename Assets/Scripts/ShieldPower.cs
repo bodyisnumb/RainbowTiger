@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShieldPower : MonoBehaviour
 {
-    public float shieldDuration = 5f; // Adjust the shield duration as needed
+    public float shieldDuration = 5f; 
     private bool isShieldActive = false;
     private float shieldTimer = 0f;
     private TigerMovement tigerMovement;
@@ -17,7 +17,7 @@ public class ShieldPower : MonoBehaviour
 
     }
 
-    // Call this method when the Shield Power button is pressed
+    
     public void ActivateShieldPower()
     {
         if (!isShieldActive && shieldCount > 0)

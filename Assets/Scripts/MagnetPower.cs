@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MagnetPower : MonoBehaviour
 {
-    public float magnetDuration = 1f; // Adjust the duration as needed
-    public float enlargedColliderRadius = 8f; // Adjust the enlarged collider size as needed
+    public float magnetDuration = 1f; 
+    public float enlargedColliderRadius = 8f; 
     private TigerMovement tigerMovement;
     private EconomicManager economicManager;
     private SoundPlayer soundPlayer;
@@ -18,7 +18,7 @@ public class MagnetPower : MonoBehaviour
 
     }
 
-    // Call this method when the Magnet Power button is pressed
+    
     public void ActivateMagnetPower()
     {
         if (!isMagnetActive && magnetCount > 0)
@@ -29,7 +29,7 @@ public class MagnetPower : MonoBehaviour
             soundPlayer.PlaySound("Battery");
             tigerMovement.EnlargeCollider(enlargedColliderRadius);
             economicManager.DeductBattery();
-            // Implement any visual or sound effects for the magnet activation
+            
         }
     }
 
@@ -54,11 +54,11 @@ public class MagnetPower : MonoBehaviour
     {
         isMagnetActive = false;
 
-        // Shrink the tiger's collider back to its original size
+        
         tigerMovement.ShrinkCollider();
         
 
-        // Implement any visual or sound effects for the magnet deactivation
+        
     }
 }
 

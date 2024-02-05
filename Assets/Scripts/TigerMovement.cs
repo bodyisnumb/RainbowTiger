@@ -101,7 +101,7 @@ public class TigerMovement : MonoBehaviour
     {
         if (isJumping)
         {
-            float scaleY = Mathf.PingPong(Time.time * 7.0f, 0.15f); // Adjust the multiplier for the jump height
+            float scaleY = Mathf.PingPong(Time.time * 7.0f, 0.15f);
             transform.localScale = new Vector3(originalScale.x, scaleY + originalScale.y, originalScale.z);
         }
         else
@@ -162,20 +162,20 @@ public class TigerMovement : MonoBehaviour
         {
             Color crystalColor = collision.GetComponent<SpriteRenderer>().color;
             Debug.Log("Color crystal gathered: " + crystalColor);
-                    // Instantiate the explosion prefab
+                    
             GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
             soundPlayer.PlaySound("Success");
-            // Get the particle system component on the explosion prefab
+            
             ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
             
-            // Play the particle system
+            
             if (explosionParticles != null)
             {
                 explosionParticles.Play();
 
             }
             crystalManager.RemoveColorCrystal(collision.gameObject);
-            // Implement logic based on the color gathered
+            
             Destroy(explosionInstance, explosionParticles.main.duration);
             uIManagerGame.AddToScoreAndCoins(1);
         }
@@ -186,10 +186,10 @@ public class TigerMovement : MonoBehaviour
             Debug.Log("Progress crystal gathered: " + crystalColor);
             GameObject explosionInstance = Instantiate(explosionPrefab, collision.transform.position, Quaternion.identity);
 
-            // Get the particle system component on the explosion prefab
+            
             ParticleSystem explosionParticles = explosionInstance.GetComponent<ParticleSystem>();
             
-            // Play the particle system
+            
             if (explosionParticles != null)
             {
                 explosionParticles.Play();
@@ -271,12 +271,12 @@ public class TigerMovement : MonoBehaviour
         }
     }
 
-    // Add this method to shrink the collider back to its original size
+    
     public void ShrinkCollider()
     {
         if (tigerCollider != null)
         {
-            // Set the collider back to its original size, you may need to adjust this based on your initial collider radius
+            
             tigerCollider.radius = originalColliderRadius;
         }
     }

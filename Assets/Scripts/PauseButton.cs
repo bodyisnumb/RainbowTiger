@@ -22,13 +22,13 @@ public class PauseButton : MonoBehaviour
         {
             PauseGame();
             DisablePanels();
-            buttonText.text = "Paused";
+        //    buttonText.text = "Paused";
         }
         else
         {
             UnpauseGame();
             EnablePanels();
-            buttonText.text = "";
+        //    buttonText.text = "";
         }
     }
 

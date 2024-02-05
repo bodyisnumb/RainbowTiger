@@ -6,11 +6,11 @@ public class CloudMovement : MonoBehaviour
 
     void Update()
     {
-        // Move the cloud to the left (negative X direction)
+        
         transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
 
-        // Optionally, destroy the cloud when it goes off-screen
-        if (transform.position.x < -20f) // Adjust the threshold based on your scene
+        
+        if (transform.position.x < -20f)
         {
             Destroy(gameObject);
         }

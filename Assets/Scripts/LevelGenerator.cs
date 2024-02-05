@@ -19,17 +19,17 @@ public class LevelGenerator : MonoBehaviour
     private int currentLevel = 1;
     private int colorsAvailableAtStart = 3;
 
-    private int rows = 8; // Define rows
-    private int columns = 4; // Define columns
+    private int rows = 8; 
+    private int columns = 4; 
 
     private List<Color> rainbowColors = new List<Color> {
         Color.red,
-        new Color(1.0f, 0.6f, 0.0f), // Orange
+        new Color(1.0f, 0.6f, 0.0f), 
         Color.yellow,
         Color.green,
         Color.cyan,
         Color.blue,
-        new Color(0.5f, 0.0f, 0.5f) // Purple
+        new Color(0.5f, 0.0f, 0.5f) 
     };
 
     void Start()
