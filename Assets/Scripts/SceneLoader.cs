@@ -7,6 +7,49 @@ public class SceneLoader : MonoBehaviour
 {
     public GameObject loadingScreen;
     public Slider loadingBar;
+    public GameObject mainButtonsPanel;
+
+    void Start()
+    {
+        // Check if the current scene is the "MainMenu" scene
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            // Start the initial loading screen coroutine
+            StartCoroutine(ShowInitialLoadingScreen());
+        }
+    }
+
+    IEnumerator ShowInitialLoadingScreen()
+    {
+        // Show the loading screen
+        loadingScreen.SetActive(true);
+
+        // Set the initial delay to 7.5 seconds
+        float initialDelay = 7.5f;
+        float elapsedTime = 0f;
+
+        // Wait for the initial delay
+        while (elapsedTime < initialDelay)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // Update loading bar progress during initial delay
+            if (loadingBar != null)
+            {
+                loadingBar.value = Mathf.Clamp01(elapsedTime / initialDelay);
+            }
+
+            yield return null;
+        }
+
+        // If MainButtonsPanel is found, you can access its components or modify its properties
+        if (mainButtonsPanel != null)
+        {
+            mainButtonsPanel.SetActive(true);
+        }
+        // Load the main menu scene
+        loadingScreen.SetActive(false);
+    }
 
     public void LoadGameScene()
     {
@@ -28,7 +71,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("Tutorial");
     }
 
-    IEnumerator LoadSceneAsync(string sceneName)
+ IEnumerator LoadSceneAsync(string sceneName)
     {
         loadingScreen.SetActive(true);
 
@@ -67,6 +110,7 @@ public class SceneLoader : MonoBehaviour
         loadingScreen.SetActive(false);
     }
 }
+
 
 
 

@@ -6,6 +6,7 @@ public class PauseButton : MonoBehaviour
     private bool isPaused = false;
     public GameObject pawPanel;
     public GameObject powerPanel;
+    public GameObject pausePanel;
     private Text buttonText;
 
     private void Start()
@@ -22,12 +23,20 @@ public class PauseButton : MonoBehaviour
         {
             PauseGame();
             DisablePanels();
+            if (pausePanel != null)
+                {
+                    pausePanel.SetActive(true);
+                }
         //    buttonText.text = "Paused";
         }
         else
         {
             UnpauseGame();
             EnablePanels();
+            if (pausePanel != null)
+                {
+                    pausePanel.SetActive(false);
+                }
         //    buttonText.text = "";
         }
     }

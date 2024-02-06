@@ -731,6 +731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 1952581012}
   loadingBar: {fileID: 1598726878}
+  mainButtonsPanel: {fileID: 0}
 --- !u!1 &1250198229
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,7 +1494,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1073774729}
         m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMenuScene
+        m_MethodName: LoadMenuFast
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
